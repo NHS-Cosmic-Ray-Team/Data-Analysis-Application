@@ -1,0 +1,298 @@
+nav {
+    position: absolute;
+    width: 100vw;
+    height: 80px;
+    
+    z-index: 8;
+}
+
+nav > img {
+    margin-left: 20px;
+    transform: translateY(5px);
+}
+
+nav > p {
+    font-family: "Open Sans", sans-serif;
+    font-size: 24px;
+    font-style: italic;
+    color: white;
+    
+    margin-left: 10px;
+}
+
+#main-content {
+    position: relative;
+    padding-top: 80px;
+    min-height: calc(100vh - 80px);
+}
+
+#main-content > .bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    
+    overflow: hidden;
+    z-index: 0;
+}
+
+#main-content > .section {
+    position: relative;    
+    width: 100%;
+    height: 100vh;
+}
+
+.section > a:first-of-type {
+    position: absolute;
+    top: 0;
+}
+
+
+
+.panel {
+    position: relative;
+    display: inline-block;
+    width: 80%;
+    padding: 60px 20px 20px 30px;
+    
+    background-color: white;
+    border: solid 2px #dddddd;
+    border-radius: 10px;
+    
+    -webkit-box-shadow: 0px 0px 35px -8px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 35px -8px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 35px -8px rgba(0,0,0,0.75);
+    
+    overflow-x: hidden;
+    
+    transition: ease 0.2s;
+}
+
+.panel.header-hover {
+    border-color: #7c7c7c;
+}
+
+.panel.full {
+    height: 70%;
+}
+
+.panel > header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100% - 20px);
+    height: 40px;
+    padding-left: 20px;
+    
+    font-family: "Open Sans", sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #606060;
+    
+    background-color: #dddddd;
+    
+    transition: ease 0.2s;
+}
+
+.panel.closeable > header:after {
+    content: '\00d7';
+    
+    font-family: "Open Sans", sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: #606060;
+    
+    margin: 0 20px 0 auto;
+    
+    transition: ease 0.2s;
+}
+
+.panel.closeable > header:hover {
+    background-color: #7c7c7c;
+    color: white;
+    cursor: pointer;
+}
+
+.panel.closeable > header:hover:after {
+    color: white;
+    font-size: 28px;
+}
+
+.panel p {
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    color: black;
+}
+
+.panel button {
+    position: relative;
+    display: block;
+    width: 200px;
+    height: 40px;
+    padding: 5px 10px;
+    
+    font-family: "Open Sans", sans-serif;
+    font-size: 18px;
+    color: white;
+    
+    background-color: #5E8EB3;
+    border: solid 1px #8dbbde;
+    border-radius: 2px;
+}
+
+.panel button:hover {
+    background-color: #7591a7;
+    cursor: pointer;
+}
+
+
+
+
+
+.overlay {
+    position: fixed;
+    display: none;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    
+    background-color: rgba(1,1,1,0.7);
+    
+    z-index: 10;
+}
+
+.overlay:not(.show) {
+    display: none;
+}
+
+
+
+
+
+.file-chooser {
+    position: relative;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px - 50px);
+    
+    border: dashed 5px #7591a7;
+    
+    transition: ease 0.3s;
+}
+
+.file-chooser.error {
+    border: dashed 5px #e67a7a;
+}
+
+.file-chooser p {
+    font-family: "Open Sans", sans-serif;
+    font-size: 22px;
+    font-style: italic;
+    color: #7591a7;
+    
+    transition: ease 0.3s;
+}
+
+.file-chooser.error p {
+    color: #e67a7a;
+    
+    z-index: -1;
+}
+
+.file-chooser p:first-of-type {
+    font-family: "Fredoka One", cursive;
+    font-style: normal;
+    font-size: 32px;
+}
+
+.file-chooser.hover {
+    border-color: #9bb4c7;
+    transform: scale(1.01);
+    cursor: pointer;
+}
+
+.file-chooser.hover > p {
+    transform: scale(calc(1/1.01));
+    color: #9bb4c7;
+}
+
+.brand-buttons {
+    width: 100%;
+    height: 50px;
+}
+
+.google-button {
+    display: inline-block;
+    height: 14px;
+    
+    font-family: "Lucida Grande", "Segoe UI", "Tahoma", "Helvetica Neue", "Helvetica", sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #636363;
+    text-decoration: none;
+    line-height: 11px;
+    
+    margin-right: 20px;
+    padding: 1px 7px 5px 3px;
+    border: 1px solid #ebebeb;
+    border-radius: 2px;
+    border-bottom-color: #d4d4d4;
+    
+    background: linear-gradient(to bottom, #fcfcfc 0%, #f5f5f5 100%);
+}
+
+.google-button .google-icon {
+    position: relative;
+    display: inline-block;
+    top: 2px;
+    width: 15px;
+    height: 14px;
+    vertical-align: baseline;
+    margin: 0 5px 0 2px;
+    
+    background-image: url(https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_48dp.png);
+    background-position: 0 0;
+    background-size: 14px 14px;
+    -webkit-background-size: 14px 14px;
+}
+
+
+
+
+
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.flex-row-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.center {
+    margin: auto;
+}
+
+* {
+    z-index: 1;
+}
+
+@media only screen and (max-width: 350px) {
+    nav > p {
+        display: none;
+    }
+}

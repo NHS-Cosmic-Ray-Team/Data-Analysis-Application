@@ -1,0 +1,87 @@
+<!--
+    Attribution: https://thenounproject.com/search/?q=mu&i=880660, https://www.freepik.com/free-vector/planet-earth-design_2940569.htm#page=1&query=earth&position=1
+!-->
+
+<!DOCTYPE>
+<html>
+    <head>
+        <title>NHS Cosmic Ray Team</title>
+        <link rel="icon" href="images/icons/mu256x256.png">
+        
+        <link rel="stylesheet" type="text/css" href="css/reset.css">
+        <link rel="stylesheet" type="text/css" href="css/stars.css">
+        <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
+        <link rel="stylesheet" type="text/css" href="css/home.css">
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Open+Sans&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <nav class="flex-row">
+            <img src="images/icons/mu256x256.png" height=40>
+            <p>NHS Cosmic Ray Team</p>
+        </nav>
+        <div id="main-content">
+            <div class="bg" data-layer=0>
+                <div class="stars"></div>
+                <div class="twinkling"></div>
+                <img src="images/earth-trans-bg-2.png" width=150%>
+            </div>
+            <div class="section">
+                <h1>What would you like to do?</h1>
+                <ul>
+                    <li>
+                        <a href="#refine">
+                            <p>Dataset Refinement</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            <p>Data Analysis</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="section flex-column">
+                <a name="refine"></a>
+                <div class="panel">
+                    <header class="flex-row">Dataset Refiner</header>
+                    <button class="center" type="button" onclick="overlay('choose-file');">Choose File</button>
+                </div>
+            </div>
+            <div class="section">
+            
+            </div>
+            <div class="section">
+            
+            </div>
+        </div>
+        <div class="overlay flex-column" name="choose-file">
+            <div class="panel full closeable">
+                <header class="flex-row">Choose a File</header>
+                               
+                <div class="file-chooser flex-column">
+                    <p>Drop a CSV File Here</p>
+                    <p>or click to choose...</p>
+                </div>
+                <div class="brand-buttons flex-row-center">
+                    <!-- DROPBOX AND DRIVE BUTTONS !-->
+                    <a href="#" class="google-button">
+                        <span class="google-icon"></span>
+                        Select from Drive
+                    </a>
+                    <div id="result"></div>
+                </div>
+            </div>
+        </div>
+    </body>
+        
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="hskialgi33wu6jb"></script>
+    
+    <script src="js/ui.js"></script>
+    <script src="js/file-chooser.js"></script>
+    <script src="js/brand-buttons.js"></script>
+    
+    <script type="text/javascript" src="https://apis.google.com/js/api.js?onload=onGapiLoad"></script>
+</html>
