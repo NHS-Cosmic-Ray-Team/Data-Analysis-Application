@@ -146,6 +146,28 @@ nav > p {
     cursor: pointer;
 }
 
+.panel .flex-row button:not(:first-of-type), .panel .flex-row-center button:not(:first-of-type) {
+    margin-left: 20px;
+}
+
+.panel button.alt-button {
+    width: 160px;
+    height: 30px;
+    font-size: 16px;
+    color: #112c77;
+    
+    background-color: #c7c7c7;
+    border: solid 1px #d9d9d9;
+}
+
+.panel button.alt-button:hover {
+    background-color: #a7a7a7;
+}
+
+.panel .buttons {
+    margin-bottom: 40px;
+}
+
 
 
 
@@ -191,13 +213,14 @@ nav > p {
     font-style: italic;
     color: #7591a7;
     
+    pointer-events: none;
+    z-index: -1;
+    
     transition: ease 0.3s;
 }
 
 .file-chooser.error p {
     color: #e67a7a;
-    
-    z-index: -1;
 }
 
 .file-chooser p:first-of-type {
@@ -215,6 +238,12 @@ nav > p {
 .file-chooser.hover > p {
     transform: scale(calc(1/1.01));
     color: #9bb4c7;
+}
+
+.file-chooser input[name=file] {
+    display: none;
+    pointer-events: none;
+    z-index: -1;
 }
 
 .brand-buttons {

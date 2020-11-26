@@ -1,0 +1,31 @@
+form.file-headers {
+    display: inline-block;
+    width: 100%;
+}
+
+form.file-headers h3 {
+    font-family: "Open Sans", sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    color: black;
+}
+
+form.file-headers ul {
+    width: calc(100% - 50px);
+    margin-top: 10px;
+}
+
+form.file-headers ul li {
+    margin-bottom: 20px;
+}
+
+form.file-headers ul li:not(:first-child) {
+    margin-left: 40px;
+}
+
+form.file-headers ul li label {
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    color: black;
+    margin-left: 10px;
+}

@@ -4,7 +4,7 @@
 
         // Required. Called when a user selects an item in the Chooser.
         success: function(files) {
-            handleFiles(files)
+            //TODO: Dropbox Implementation
         },
 
         // Optional. Called when the user closes the dialog without selecting a file
@@ -37,7 +37,6 @@
     //Create the Dropbox button
     var dropboxChooser = Dropbox.createChooseButton(dropboxOptions);
     $(".file-chooser + .brand-buttons").append(dropboxChooser);
-    console.log(dropboxChooser);
 }
 
 //GOOGLE DRIVE
@@ -67,7 +66,8 @@
     }
     
     //A function for loading the various APIs required.
-    function loadApis() {
+    function loadApis(e) {
+        e.preventDefault();
         gapi.load('auth2', onAuthApiLoad);
         gapi.load('picker', onPickerApiLoad);
     }
@@ -117,6 +117,8 @@
     // A simple callback implementation.
     function pickerCallback(data) {
         if (data.action == google.picker.Action.PICKED) {
+            $(".overlay[name=choose-file]").fadeOut(200);
+            
             gapi.load("client", function() {
                 gapi.client.load('drive', 'v3', function() {
                     downloadFiles(data.docs);
@@ -125,9 +127,16 @@
         }
     }
     
+    //A function for getting the contents of the various files before sending them to the callback
     function downloadFiles(data) {           
+        //An array of the contents of each file.
         var files = [];
+        
+        //A variable for tracking when all files have been checked.
+        var allChecked = false;
+        
         for(var i = 0; i < data.length; i++) {
+            //Request the contents of the file.
             var request = gapi.client.drive.files.export({
                 'fileId': data[i].id,
                 'mimeType': "text/csv",
@@ -135,15 +144,25 @@
             });
             
             request.then(function(response) {
-                console.log(response.body);
+                //Add the contents to the array
+                files.push(response.body);
+                
+                //If all files have now been loaded, send them to the callback to be processed.
+                if(allChecked) {
+                    var callback = eval($(".overlay[name=choose-file]").attr("data-callback"));
+                                        
+                    if(typeof(callback) == "function")
+                        callback(files);
+                }
             }, function(error) {
                 console.error(error);
-            })
+            });
+            
+            //If all files have been checked, note it for the async promises.
+            if(i == data.length - 1)
+                allChecked = true;
         }
-        
-        console.log(files);
     }
-    
     
     $(".google-button").click(loadApis);
 }
