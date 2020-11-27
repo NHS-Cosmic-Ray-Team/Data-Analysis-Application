@@ -29,3 +29,43 @@ form.file-headers ul li label {
     color: black;
     margin-left: 10px;
 }
+
+form.file-headers .option {
+    padding: 10px;
+    width: calc(100% - 20px);
+    margin-bottom: 20px;
+}
+
+form.file-headers .option:last-of-type {
+    margin-bottom: 40px;
+}
+
+form.file-headers .option *:first-child {
+    margin-right: 20px;
+}
+
+form.file-headers .option *:not(:first-child) {
+    margin-left: 10px;
+}
+
+form.file-headers .option p {
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    color: black;
+}
+
+form.file-headers .option input[type=number] {
+    width: 200px;
+    border: solid 1px #767676;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+form.file-headers .option input[type=checkbox]:not(:checked) ~ p {
+    color: rgba(1, 1, 1, 0.7);
+}
+
+form.file-headers .option input[type=checkbox]:not(:checked) ~ input[type=number] {
+    background-color: #e4e4e4;
+    pointer-events: none;
+}

@@ -154,18 +154,18 @@ nav > p {
     width: 160px;
     height: 30px;
     font-size: 16px;
-    color: #112c77;
+    color: white;
     
-    background-color: #c7c7c7;
-    border: solid 1px #d9d9d9;
+    background-color: #6eae22;
+    border: solid 1px #7aa24b;
 }
 
 .panel button.alt-button:hover {
-    background-color: #a7a7a7;
+    background-color: #518117;
 }
 
 .panel .buttons {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 
