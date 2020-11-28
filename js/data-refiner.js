@@ -1,13 +1,13 @@
 //The array of contents, held as an object
-var contentObjs;
+var contentObjsRefiner;
 
 //Acts as a callback for the filechooser
-function loadDatasets(fileContents) {
+function loadDatasetsRefiner(fileContents) {
     //Empty the array when new files are uploaded
-    contentObjs = [];
+    contentObjsRefiner = [];
     
     //Remove any pre-existing UI.
-    $("form.file-headers").remove();
+    $("div[name=data-refiner] form.file-headers").remove();
     $("div[name=data-refiner] .panel div.buttons").remove();
     $("div[name=data-refiner] .panel div.actions button[name=export]").remove();
     
@@ -25,12 +25,12 @@ function loadDatasets(fileContents) {
             header: true,
             skipEmptyLines: true
         });
-        contentObjs.push(data.data);
+        contentObjsRefiner.push(data.data);
                 
         //Add the fields as checkboxes to select
         data.meta.fields.forEach(field => {
             if(field != "") {
-                if($("form.file-headers ul li input[name=" + field + "]").length <= 0) {
+                if(form.find("ul li input[name=" + field + "]").length <= 0) {
                     form.find("ul").append($("<li class='flex-row'><input name='" + field + "' type='checkbox' value='" + field + "' checked><label for='" + field + "'>" + field + "</label></li>"))
                     
                     if(i > 0)
@@ -43,13 +43,14 @@ function loadDatasets(fileContents) {
     allOrNoneButtons();
     rowSelectorOption();
     exportButton();
+    sendToAnalyzerButton();
 }
 
 //Creates an option to choose a row range to export
 function rowSelectorOption() {
     //A variable tracking the maximum number of rows allowed.
     var maxRows = 0;
-    contentObjs.forEach(x => {
+    contentObjsRefiner.forEach(x => {
         maxRows += x.length;
     });
     
@@ -99,6 +100,20 @@ function exportButton() {
     $("div[name=data-refiner] .panel > div.actions").prepend(exportButton);
 }
 
+//A function for creating the send to analyzer button
+function sendToAnalyzerButton() {
+    var sendToAnalyzerButton = $("<button type='button' name='export'>Send to Analyzer</button>").click(function() {
+        loadDatasetsAnalyzer(
+            Papa.unparse(generateExportedCSVObject())
+        );
+    });
+    
+    //Append it
+    $("div[name=data-refiner] .panel > div.actions").prepend(sendToAnalyzerButton);
+    
+    window.scrollTo(0, $("a[name=graphs]").position().top);
+}
+
 //A function for exporting the selection
 function exportFiles() {
     var blob = new Blob([
@@ -125,7 +140,7 @@ function generateExportedCSVObject() {
     
     console.log(bounds);
     
-    contentObjs.forEach(content => {
+    contentObjsRefiner.forEach(content => {
         if(!rowsOption)
             bounds[1] = content.length;
         

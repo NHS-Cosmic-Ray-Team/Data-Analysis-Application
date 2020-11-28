@@ -1,0 +1,128 @@
+form.file-headers-grid ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    
+    margin-top: 50px;
+}
+
+form.file-headers.file-headers-grid ul li {
+    position: relative;
+    margin-left: 50px;
+    margin-bottom: 0;
+}
+
+form.file-headers-grid ul li:not(.columns) > p:first-child {
+    position: absolute;
+    right: calc(100% + 10px);
+}
+
+form.file-headers.file-headers-grid ul li input[type=checkbox] {
+    width: 12.67px;
+    height: 12.67px;
+}
+
+form.file-headers.file-headers-grid ul li.columns {
+    align-items: flex-end;
+}
+
+form.file-headers.file-headers-grid ul li.columns p {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    margin: 3px 3px 3px 4px;
+    line-height: 12.67px;
+}
+
+form.file-headers.file-headers-grid ul li.columns p:first-child {
+    margin-left: 6px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+div.graph-expand {
+    position: relative;
+    width: calc(100% - 100px - 2px - 10px);
+    height: 20px;
+    
+    padding: 10px 50px;
+    background-color: #dedede;
+    
+    border: solid 1px gray;
+    border-radius: 10px;
+    
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    color: black;
+    
+    transition-delay: 2s;
+    transition: 0.1s linear;
+}
+
+div.graph-expand.expanded {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-width: 0;
+    
+    background-color: #b5b5b5;
+}
+
+div.graph-expand:hover {
+    cursor: pointer;
+    background-color: #b5b5b5;
+}
+
+div.graph-expand:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 25px;
+    width: 0; 
+    height: 0; 
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent; 
+
+    border-left: 8px solid black;
+    
+    transform: translateY(-50%);
+    
+    transition: ease 0.2s;
+}
+
+div.graph-expand:hover:after {
+    transform: translateY(-35%) rotate(45deg);
+}
+
+div.graph-expand.expanded:after {
+    transform: translateY(-35%) rotate(90deg);
+}
+
+div.graph-expand:not(:first-of-type) {
+    margin-top: 20px;
+}
+
+div.graph {
+    position: relative;
+    display: flex;
+    width: calc(100% - 10px - 2px);
+    
+    background-color: #ebebeb;
+    border-top-width: 0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border: solid 1px gray;
+    
+    transition: ease transform 2s;
+}
+
+div.graph-expand.expanded + div.graph {
+}
