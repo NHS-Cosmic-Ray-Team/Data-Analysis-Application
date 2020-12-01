@@ -10,6 +10,12 @@ form.file-headers h3 {
     color: black;
 }
 
+form.file-headers h3:not(:first-of-type) {
+    border-top: 1px solid gray;
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
 form.file-headers ul {
     width: calc(100% - 50px);
     margin-top: 10px;
@@ -36,14 +42,12 @@ form.file-headers .option {
     margin-bottom: 20px;
 }
 
-form.file-headers .option:not(:first-of-type) {
-    border-top: 1px solid gray;
-    margin-top: 10px;
-    padding-top: 10px;
-}
-
 form.file-headers .option:last-of-type {
     margin-bottom: 40px;
+}
+
+form.file-headers .option:not(:last-of-type) {
+    margin-top: 20px;
 }
 
 form.file-headers .option *:first-child {
@@ -60,7 +64,7 @@ form.file-headers .option p {
     color: black;
 }
 
-form.file-headers .option input[type=number] {
+form.file-headers .option input[type=number], form.file-headers .option input[type=text] {
     width: 200px;
     border: solid 1px #767676;
     border-radius: 5px;

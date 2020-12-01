@@ -1,6 +1,9 @@
 //The array of contents, held as an object
 var contentObjsRefiner;
 
+//A dictionary of basic stats by field name
+var basicStats = {};
+
 //Acts as a callback for the filechooser
 function loadDatasetsRefiner(fileContents) {
     //Empty the array when new files are uploaded
@@ -15,6 +18,8 @@ function loadDatasetsRefiner(fileContents) {
     var form = $("<form class='file-headers'><h3>Form Headers</h3><ul name='checkboxes'></ul></form></div>");
     $("div[name=data-refiner] .panel").prepend(form);
     
+    var dataArrays = {};
+    
     //Loop through each file, save its contents, and add its fields to the list of choices.
     for(var i = 0; i < fileContents.length; i++) {
         fileContents[i] = fileContents[i].split('\n').filter(x => {
@@ -25,13 +30,29 @@ function loadDatasetsRefiner(fileContents) {
             header: true,
             skipEmptyLines: true
         });
-        contentObjsRefiner.push(data.data);
+        contentObjsRefiner.push(data);
                 
         //Add the fields as checkboxes to select
         data.meta.fields.forEach(field => {
             if(field != "") {
+                data.data.forEach(obj => {
+                    if(dataArrays[field] == undefined)
+                        dataArrays[field] = [];
+                    
+                    dataArrays[field].push(obj[field]);
+                })
+                
+                
                 if(form.find("ul li input[name=" + field + "]").length <= 0) {
                     form.find("ul").append($("<li class='flex-row'><input name='" + field + "' type='checkbox' value='" + field + "' checked><label for='" + field + "'>" + field + "</label></li>"))
+                    
+                    $("input[name='" + field + "']").change(function() {
+                        if($(this).is(":checked")) {
+                            $("div.outlier-checkboxes").append($("<div class='flex-row'><input type='checkbox' name='" + field + "' checked><p>" + field + "</p></div>"));
+                        } else {
+                            $("div.outlier-checkboxes input[name='" + field + "']").parent().remove();
+                        }
+                    })
                     
                     if(i > 0)
                         form.append($("<p class='warning'>Warning: Differing fields in loaded files.</p>"))
@@ -39,6 +60,15 @@ function loadDatasetsRefiner(fileContents) {
             }
         });
     }
+    
+    Object.keys(dataArrays).forEach(function(key) {   
+        var arr = dataArrays[key].map(x => parseFloat(x));
+        
+        basicStats[key] = {
+            mean: ss.mean(arr),
+            deviation: ss.standardDeviation(arr)
+        };
+    });
     
     allOrNoneButtons();
     options();
@@ -53,7 +83,7 @@ function options() {
         //A variable tracking the maximum number of rows allowed.
         var maxRows = 0;
         contentObjsRefiner.forEach(x => {
-            maxRows += x.length;
+            maxRows += x.data.length;
         });
 
 
@@ -66,7 +96,7 @@ function options() {
     
     //OUTLIERS
     {
-        $("form.file-headers").append($("<h3>Outliers</h3>"))
+        $("form.file-headers").append($("<h3>Outliers</h3><div class='option'><div class='flex-row'><input name='use-outliers' type='checkbox'><p>Exclude data points lying outside</p><input name='standard-deviations' type='number'><p>standard deviations.</p></div><div class='outlier-checkboxes flex-row'></div></div>"));
     }
 }
 
@@ -174,17 +204,31 @@ function generateExportedCSVObject() {
         rowRanges.push([0, 0]);
         
     //Loop through all files and all row ranges
-    contentObjsRefiner.forEach(content => {
+    contentObjsRefiner.forEach(data => {
+        var content = data.data;
+        
         rowRanges.forEach(range => {
             //Deal with cases where no range was specified or the range is out of bounds
             if(range[1] == 0 || range[1] > content.length)
                 range[1] = content.length;
 
             for(var i = range[0]; i < range[1]; i++) {
-                result.push(valuesKeysContain(content[i], selectedFields))
+                var push = valuesKeysContain(content[i], selectedFields);
+                
+                if($("input[name=use-outliers]").is(":checked"))
+                    if(checkForOutliers(selectedFields, push))
+                        continue;
+                
+                result.push(push);
             }
         });
     });
+    
+    if($("input[name=use-outliers]").is(":checked")) {
+        $("div.outlier-checkboxes input[type=checkbox]:checked").each(function() {
+            var field = $(this).attr("name");
+        });
+    }
     
     return result;
 }
@@ -197,4 +241,19 @@ function valuesKeysContain(pairing, contains) {
             result.push(pairing[key]);
     
     return result;
+}
+
+function checkForOutliers(fields, array) {
+    var deviations = parseFloat($("input[name=standard-deviations]").val());
+    
+    for(var i = 0; i < fields.length; i++) {
+        if($("div.outlier-checkboxes input[type=checkbox][name='" + fields[i] + "']:checked").length > 0) {
+            console.log(basicStats[fields[i]].mean + ":" + basicStats[fields[i]].deviation);
+            
+            if(array[i] < basicStats[fields[i]].mean - basicStats[fields[i]].deviation * deviations || array[i] > basicStats[fields[i]].mean + basicStats[fields[i]].deviation * deviations)
+                return true;
+        }
+    }
+    
+    return false;
 }
