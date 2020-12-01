@@ -36,6 +36,36 @@ form.file-headers.file-headers-grid ul li.columns p:first-child {
     margin-left: 6px;
 }
 
+form.file-headers.file-headers-grid a {
+    position: relative;
+    display: inline-flex;
+    height: 18px;
+    padding: 20px;
+    margin: 10px;
+    
+    text-decoration: none;
+}
+
+form.file-headers.file-headers-grid a p {
+    margin: 0 20px;
+    
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+}
+
+form.file-headers.file-headers-grid a img {
+    height: 18px;
+}
+
+form.file-headers.file-headers-grid a * {
+    transition: 0.3s ease transform;
+}
+
+form.file-headers.file-headers-grid a:hover * {
+    transform: translateY(-5px);
+}
 
 
 

@@ -158,7 +158,7 @@ function createRowRange(maxRows) {
 function createQuery() {
     //A button for deleting the ow range element.
     var deleteButton = $("<button name='delete' type='button'>&times;</button>").click(function() {
-        $(this).parent("div.row-range").remove();
+        $(this).parent("div.query").remove();
     }).css("min-width", 0);
     
     //Create the element and attach the delete button
@@ -221,12 +221,12 @@ function sendToAnalyzerButton() {
         loadDatasetsAnalyzer(
             [Papa.unparse(generateExportedCSVObject())]
         );
+    
+        window.location = "#analysis";
     });
     
     //Append it
     $("div[name=data-refiner] .panel > div.actions").prepend(sendToAnalyzerButton);
-    
-    window.scrollTo(0, $("a[name=graphs]").position().top);
 }
 
 //A function for exporting the selection

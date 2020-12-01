@@ -61,7 +61,7 @@ function loadDatasetsAnalyzer(fileContents) {
         }
     }
     
-    form.append($("<a name='scroll-to-graphs' href='graphs><p>Scroll Down for Results</p></a>'"));
+    form.append($("<div class='flex-row-center'><a name='scroll-to-graphs' href='#graphs' class='flex-row-center'><img src='images/icons/chevron-down.png'><p>Scroll Down for Results</p><img src='images/icons/chevron-down.png'></a></div>'"));
 }
 
 //A function for generating graphs based on an independent and dependent field
