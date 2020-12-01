@@ -61,6 +61,7 @@ function loadDatasetsRefiner(fileContents) {
         });
     }
     
+    //Gets basic statistics for a number of data values.
     Object.keys(dataArrays).forEach(function(key) {   
         var arr = dataArrays[key].map(x => parseFloat(x));
         
@@ -96,7 +97,27 @@ function options() {
     
     //OUTLIERS
     {
-        $("form.file-headers").append($("<h3>Outliers</h3><div class='option'><div class='flex-row'><input name='use-outliers' type='checkbox'><p>Exclude data points lying outside</p><input name='standard-deviations' type='number'><p>standard deviations.</p></div><div class='outlier-checkboxes flex-row'></div></div>"));
+        $("form.file-headers").append($(
+            "<h3>Outliers</h3>" +
+            "<div class='option'>" +
+                "<div class='flex-row'>" +
+                    "<input name='use-outliers' type='checkbox'><p>Exclude data points lying outside</p><input name='standard-deviations' type='number'><p>standard deviations.</p>" +
+                "</div>" +
+                "<div class='outlier-checkboxes flex-row'>" +
+                "</div>" +
+            "</div>"));
+    }
+    
+    //QUERIES
+    {
+        //Creates a query
+        var queryCreateButton = $("<button type='button' name='queries'>Create Query</button>").click(function() {
+            createQuery();
+        });
+        
+        var queryMatchMode = $("<div class='flex-row'><input name='query-mode' type='checkbox' checked><p>AND Matching Mode</p></div>");
+
+        $("form.file-headers").append($("<h3>Inclusion Queries</h3>")).append(queryCreateButton).append(queryMatchMode);
     }
 }
 
@@ -131,6 +152,40 @@ function createRowRange(maxRows) {
     });
     
     rangeEl.insertBefore($("button[name=row-ranges]"));
+}
+
+//Creates the input for construction of a new inclusion query
+function createQuery() {
+    //A button for deleting the ow range element.
+    var deleteButton = $("<button name='delete' type='button'>&times;</button>").click(function() {
+        $(this).parent("div.row-range").remove();
+    }).css("min-width", 0);
+    
+    //Create the element and attach the delete button
+    var queryEl = $(
+    "<div class='option flex-row query' name='rows'><input type='text' name='query'></div>"
+     ).prepend(deleteButton);
+    
+    //Show user if the query is invalid
+    queryEl.find("input[name=query]").on("change focusout", function() {
+        var regex = new RegExp("(\\${.*?})+?", "gm");
+        
+        try {
+            //Replaces variables with numbers to make it readable
+            var result = math.evaluate($(this).val().replace(regex, "0"));
+
+            if(result === true || result === false)
+                $(this).removeClass("error");
+            else
+                $(this).addClass("error");
+        } catch(e) {
+            $(this).addClass("error");
+        }
+    }).focusin(function() {
+        $(this).removeClass("error");
+    })
+    
+    queryEl.insertBefore($("button[name=queries]"));
 }
 
 //Add buttons for selecting all or none.
@@ -175,7 +230,7 @@ function sendToAnalyzerButton() {
 }
 
 //A function for exporting the selection
-function exportFiles() {
+function exportFiles() {    
     var blob = new Blob([
         Papa.unparse(generateExportedCSVObject())
     ], {type: "text/csv;charset=utf-8"});
@@ -189,6 +244,13 @@ function generateExportedCSVObject() {
         return this.value; 
     }).get();
     
+    console.log("HELLO1");
+    
+    //Get any existing queries
+    var queries = $("form.file-headers .query input[type=text]").map(function() {
+        return $(this).val();
+    }).get();
+        
     var result = [selectedFields];
     
     //Get the start and end rows.
@@ -202,33 +264,38 @@ function generateExportedCSVObject() {
     
     if(rowRanges.length == 0)
         rowRanges.push([0, 0]);
-        
+            
     //Loop through all files and all row ranges
     contentObjsRefiner.forEach(data => {
         var content = data.data;
         
-        rowRanges.forEach(range => {
+        rowRanges.forEach(range => {            
             //Deal with cases where no range was specified or the range is out of bounds
             if(range[1] == 0 || range[1] > content.length)
                 range[1] = content.length;
 
             for(var i = range[0]; i < range[1]; i++) {
+                //Column refinement
                 var push = valuesKeysContain(content[i], selectedFields);
                 
+                //Outlier refinement
                 if($("input[name=use-outliers]").is(":checked"))
                     if(checkForOutliers(selectedFields, push))
                         continue;
+                
+                //Query refinement
+                var matchMode = $("input[name=query-mode]").is(":checked") ? 0 : 1;
+                                
+                if(!checkForQueries(queries, selectedFields, push, matchMode)) {
+                    continue;
+                } else {
+                    console.log(push);
+                }
                 
                 result.push(push);
             }
         });
     });
-    
-    if($("input[name=use-outliers]").is(":checked")) {
-        $("div.outlier-checkboxes input[type=checkbox]:checked").each(function() {
-            var field = $(this).attr("name");
-        });
-    }
     
     return result;
 }
@@ -243,17 +310,62 @@ function valuesKeysContain(pairing, contains) {
     return result;
 }
 
+//A function that uses standard deviations to check for and eliminate outliers based on settings
 function checkForOutliers(fields, array) {
     var deviations = parseFloat($("input[name=standard-deviations]").val());
     
     for(var i = 0; i < fields.length; i++) {
         if($("div.outlier-checkboxes input[type=checkbox][name='" + fields[i] + "']:checked").length > 0) {
-            console.log(basicStats[fields[i]].mean + ":" + basicStats[fields[i]].deviation);
-            
             if(array[i] < basicStats[fields[i]].mean - basicStats[fields[i]].deviation * deviations || array[i] > basicStats[fields[i]].mean + basicStats[fields[i]].deviation * deviations)
                 return true;
         }
     }
     
     return false;
+}
+
+/*
+ * A function for comparing column values with a user-defined query.
+ * matchMode = 0: AND matching, in which all queries must be matched
+ * matchMode = 1: OR matching, in which at least one query must be matched
+ */
+function checkForQueries(queries, fields, array, matchMode=0) {
+//    console.log(queries);
+//    console.log(fields);
+//    console.log(array);
+//    console.log(matchMode);
+        
+    if(queries.length <= 0)
+        return true;
+    
+    //The result for OR matching
+    var result = false;
+    
+    //Check each query
+    for(var i = 0; i < queries.length; i++) {
+        //Stops modification of original queries.
+        var query = queries[i];
+        
+        //Replace variable standins with the actual value
+        for(var j = 0; j < fields.length; j++)
+            query = query.replace("${" + fields[j] + "}", array[j].toString());
+                
+        try {            
+            //If the result is false and all matches must be met, return false
+            if(!math.evaluate(query) && matchMode == 0)
+                return false;
+            //If OR matching is occurring and the result is true, return true.
+            if(math.evaluate(query) && matchMode == 1)
+                return true;
+        } catch(e) {
+            console.error(e);
+            
+            //If an error is thrown, exclude it
+            return false;
+        }
+    }
+    
+    //If the end's been reached in AND matching, then it can be included because all queries have been met.
+    //If the end's been reached in OR matching, then it should be excluded because no queries have been met.
+    return matchMode == 0;
 }

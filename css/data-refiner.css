@@ -80,6 +80,16 @@ form.file-headers .option input[type=checkbox]:not(:checked) ~ input[type=number
     pointer-events: none;
 }
 
+form.file-headers .query input[type=text] {
+    position: relative;
+    width: 600px;
+    transition: background-color ease 0.5s;
+}
+
+form.file-headers .query input[type=text].error {
+    background-color: #ffd3d3;
+}
+
 div[name=data-refiner] .panel .actions {
     flex-wrap: wrap;
     border-top: solid 1px gray;
