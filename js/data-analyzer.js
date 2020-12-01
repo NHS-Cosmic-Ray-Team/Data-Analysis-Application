@@ -88,6 +88,19 @@ function generateGraph(fieldX, rowNum, fieldY, colNum) {
         })
     });
     
+    
+    $("<button type='button' class='vernier-export' name='" + fieldX + "-" + fieldY + "'>Export to Graphical Analysis</button>").click(function() {
+        exportVernierFile({
+            name: fieldX,
+            data: points.map(a => a.x)
+        }, {
+            name: fieldY,
+            data: points.map(a => a.y)
+        });
+    }).appendTo(foldout);
+    
+    
+    
     //Options
     var options = {
         legend: {

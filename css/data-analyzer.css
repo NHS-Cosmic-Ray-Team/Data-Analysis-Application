@@ -3,8 +3,6 @@ form.file-headers-grid ul {
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    
-    margin-top: 50px;
 }
 
 form.file-headers.file-headers-grid ul li {
@@ -125,4 +123,9 @@ div.graph {
 }
 
 div.graph-expand.expanded + div.graph {
+}
+
+
+div.graph button.vernier-export {
+    margin: 30px 0;
 }
