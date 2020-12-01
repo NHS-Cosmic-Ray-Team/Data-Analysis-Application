@@ -41,36 +41,66 @@ function loadDatasetsRefiner(fileContents) {
     }
     
     allOrNoneButtons();
-    rowSelectorOption();
+    options();
     exportButton();
     sendToAnalyzerButton();
 }
 
-//Creates an option to choose a row range to export
-function rowSelectorOption() {
-    //A variable tracking the maximum number of rows allowed.
-    var maxRows = 0;
-    contentObjsRefiner.forEach(x => {
-        maxRows += x.length;
-    });
+//Creates the options framework
+function options() {
+    //ROW RANGES
+    {
+        //A variable tracking the maximum number of rows allowed.
+        var maxRows = 0;
+        contentObjsRefiner.forEach(x => {
+            maxRows += x.length;
+        });
+
+
+        var rowRangeCreationButton = $("<button type='button' name='row-ranges'>Create Row Range</button>").click(function() {
+            createRowRange(maxRows);
+        });
+
+        $("form.file-headers").append($("<h3>Row Ranges</h3>")).append(rowRangeCreationButton);
+    }
     
-    //Create the element
-    $("form.file-headers").append($("<h3>Options</h3><div class='option flex-row' name='rows'><input type='checkbox' name='select-rows'><p>Select Rows</p><input type='number' step='1' name='select-rows-start' value='0'><p>to</p><input type='number' step='1' name='select-rows-end' value='" + maxRows + "'></div>"));
+    //OUTLIERS
+    {
+        $("form.file-headers").append($("<h3>Outliers</h3>"))
+    }
+}
+
+//Creates the inputs for constructing a row range to export
+function createRowRange(maxRows) { 
+    //A button for deleting the ow range element.
+    var deleteButton = $("<button name='delete' type='button'>&times;</button>").click(function() {
+        $(this).parent("div.row-range").remove();
+    }).css("min-width", 0);
+    
+    //Create the element and attach the delete button
+    var rangeEl = $(
+    "<div class='option flex-row row-range' name='rows'>" + 
+        "<p>Select Rows</p>" + 
+        "<input type='number' step='1' name='select-rows-start' value='0'><p>to</p><input type='number' step='1' name='select-rows-end' value='" + maxRows + "'>" + 
+    "</div>"
+     ).prepend(deleteButton);
     
     //Stop non-numerical values from being entered
-    $("form.file-headers .option[name=rows] input[type=number]")
+    rangeEl.find("input[type=number]")
     .on("input", function() {
         $(this).val($(this).val().replace(/[^0-9]/g,''));
     });
     
     //Stop values over the maximum row count from being entered.
-    $("form.file-headers .option[name=rows] input[name=select-rows-end]")
+    rangeEl.find("input[name=select-rows-end]")
     .on("change", function() {
         $(this).val($(this).val().replace(/[^0-9]/g,''));
         
         if(parseInt($(this).val()) > maxRows)
             $(this).val(maxRows);
-    })
+    });
+    
+    rangeEl.insertBefore($("button[name=row-ranges]"));
 }
 
 //Add buttons for selecting all or none.
@@ -132,23 +162,28 @@ function generateExportedCSVObject() {
     var result = [selectedFields];
     
     //Get the start and end rows.
-    var rowsOption = $("form.file-headers .option[name=rows] input[type=checkbox]").prop("checked");
-    var bounds = rowsOption ? [
-        parseInt($("form.file-headers .option[name=rows] input[name=select-rows-start]").val()),
-        parseInt($("form.file-headers .option[name=rows] input[name=select-rows-end]").val())
-    ] : [0, 0];
+    var rowRanges = [];
+    $("form.file-headers .option.row-range").each(function(index, el) {
+        rowRanges.push([
+            parseInt($(this).find("input[name=select-rows-start]").val()),
+            parseInt($(this).find("input[name=select-rows-end]").val())
+        ]);
+    });
     
-    console.log(bounds);
-    
+    if(rowRanges.length == 0)
+        rowRanges.push([0, 0]);
+        
+    //Loop through all files and all row ranges
     contentObjsRefiner.forEach(content => {
-        if(!rowsOption)
-            bounds[1] = content.length;
-        
-        console.log(bounds);
-        
-        for(var i = bounds[0]; i < bounds[1]; i++) {
-            result.push(valuesKeysContain(content[i], selectedFields))
-        }
+        rowRanges.forEach(range => {
+            //Deal with cases where no range was specified or the range is out of bounds
+            if(range[1] == 0 || range[1] > content.length)
+                range[1] = content.length;
+
+            for(var i = range[0]; i < range[1]; i++) {
+                result.push(valuesKeysContain(content[i], selectedFields))
+            }
+        });
     });
     
     return result;

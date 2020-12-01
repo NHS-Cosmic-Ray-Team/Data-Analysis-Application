@@ -36,6 +36,12 @@ form.file-headers .option {
     margin-bottom: 20px;
 }
 
+form.file-headers .option:not(:first-of-type) {
+    border-top: 1px solid gray;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
 form.file-headers .option:last-of-type {
     margin-bottom: 40px;
 }
@@ -68,4 +74,11 @@ form.file-headers .option input[type=checkbox]:not(:checked) ~ p {
 form.file-headers .option input[type=checkbox]:not(:checked) ~ input[type=number] {
     background-color: #e4e4e4;
     pointer-events: none;
+}
+
+div[name=data-refiner] .panel .actions {
+    flex-wrap: wrap;
+    border-top: solid 1px gray;
+    margin-top: 20px;
+    padding-top: 20px;
 }

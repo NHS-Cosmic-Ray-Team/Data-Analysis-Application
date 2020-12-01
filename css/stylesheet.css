@@ -20,6 +20,32 @@ nav > p {
     margin-left: 10px;
 }
 
+nav > a {
+    min-width: 60px;
+    margin-left: auto;
+    margin-right: 80px;
+    border: #aac76c solid 5px;
+    border-radius: 10px;
+    padding: 4px 8px;
+    text-decoration: none;
+    
+    transition: ease 0.2s;
+}
+
+nav > a:hover {
+    background-color: #aac76c;
+    cursor: pointer;
+}
+
+nav > a p {
+    width: 100%;
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+
 #main-content {
     position: relative;
     padding-top: 80px;
@@ -136,6 +162,7 @@ nav > p {
     display: block;
     min-width: 200px;
     height: 40px;
+    margin: 10px 0;
     padding: 5px 10px;
     
     font-family: "Open Sans", sans-serif;
