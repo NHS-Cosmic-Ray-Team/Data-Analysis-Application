@@ -217,9 +217,9 @@ function exportButton() {
 
 //A function for creating the send to analyzer button
 function sendToAnalyzerButton() {
-    var sendToAnalyzerButton = $("<button type='button' name='export'>Send to Analyzer</button>").click(function() {
+    var sendToAnalyzerButton = $("<button type='button' name='export'>Send to Analyzer</button>").click(function() {        
         loadDatasetsAnalyzer(
-            Papa.unparse(generateExportedCSVObject())
+            [Papa.unparse(generateExportedCSVObject())]
         );
     });
     
@@ -243,9 +243,7 @@ function generateExportedCSVObject() {
     var selectedFields = $("form.file-headers ul[name=checkboxes] input:checked").map(function() { 
         return this.value; 
     }).get();
-    
-    console.log("HELLO1");
-    
+        
     //Get any existing queries
     var queries = $("form.file-headers .query input[type=text]").map(function() {
         return $(this).val();
@@ -286,11 +284,8 @@ function generateExportedCSVObject() {
                 //Query refinement
                 var matchMode = $("input[name=query-mode]").is(":checked") ? 0 : 1;
                                 
-                if(!checkForQueries(queries, selectedFields, push, matchMode)) {
+                if(!checkForQueries(queries, selectedFields, push, matchMode))
                     continue;
-                } else {
-                    console.log(push);
-                }
                 
                 result.push(push);
             }
@@ -329,12 +324,7 @@ function checkForOutliers(fields, array) {
  * matchMode = 0: AND matching, in which all queries must be matched
  * matchMode = 1: OR matching, in which at least one query must be matched
  */
-function checkForQueries(queries, fields, array, matchMode=0) {
-//    console.log(queries);
-//    console.log(fields);
-//    console.log(array);
-//    console.log(matchMode);
-        
+function checkForQueries(queries, fields, array, matchMode=0) {        
     if(queries.length <= 0)
         return true;
     
@@ -357,9 +347,7 @@ function checkForQueries(queries, fields, array, matchMode=0) {
             //If OR matching is occurring and the result is true, return true.
             if(math.evaluate(query) && matchMode == 1)
                 return true;
-        } catch(e) {
-            console.error(e);
-            
+        } catch(e) {            
             //If an error is thrown, exclude it
             return false;
         }

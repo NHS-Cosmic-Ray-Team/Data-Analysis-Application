@@ -2,7 +2,7 @@
 var contentObjsAnalyzer;
 
 //Acts as a callback for the filechooser
-function loadDatasetsAnalyzer(fileContents) {
+function loadDatasetsAnalyzer(fileContents) {    
     //Empty the array when new files are uploaded
     contentObjsAnalyzer = [];
     
@@ -47,9 +47,7 @@ function loadDatasetsAnalyzer(fileContents) {
                     //Get fields of checkbox
                     var _fieldX = $(this).attr('data-field-x');
                     var _fieldY = $(this).attr('data-field-y');
-                    
-                    console.log(_fieldX + "," + _fieldY);
-                    
+                                        
                     //Generate or destroy based on whether something was enabled or disabled.
                     if($(this).prop("checked"))
                         generateGraph(_fieldX, j, _fieldY, k);
