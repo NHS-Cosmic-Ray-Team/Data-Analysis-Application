@@ -155,6 +155,36 @@ div.graph {
 div.graph-expand.expanded + div.graph {
 }
 
+div.graph .stats {
+    width: calc(100% - 40px);
+    padding: 20px;
+}
+
+div.graph .stats > h3 {
+    margin-bottom: 10px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+}
+
+div.graph .stats > p {
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    color: black;
+    padding: 5px 20px;
+    border-top: 1px solid black;
+}
+
+div.graph .stats > p span {
+    display: inline-block;
+    width: 100px;
+    font-weight: bold;
+}
+
+div.graph .stats > p:last-of-type {
+    border-bottom: 1px solid black;
+}
 
 div.graph button.vernier-export {
     margin: 30px 0;

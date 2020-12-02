@@ -72,63 +72,95 @@ function generateGraph(fieldX, rowNum, fieldY, colNum) {
     //Create the element that actually holds the foldout
     var foldout = $("<div class='graph flex-column' name='" + fieldX + "-" + fieldY + "' style='display: none; border-width: 0px;'><canvas></div>");
     
-    //Get the canvas context.
-    var ctx = foldout.find("canvas").get(0).getContext('2d');
-    
-    //Collect the data
-    var points = [];
-    contentObjsAnalyzer.forEach(obj => {
-        obj.forEach(dataPoint => {
-            points.push({
-                x: dataPoint[fieldX],
-                y: dataPoint[fieldY]
-            });
-        })
-    });
-    
-    
-    $("<button type='button' class='vernier-export' name='" + fieldX + "-" + fieldY + "'>Export to Graphical Analysis</button>").click(function() {
-        exportVernierFile({
-            name: fieldX,
-            data: points.map(a => a.x)
-        }, {
-            name: fieldY,
-            data: points.map(a => a.y)
-        });
-    }).appendTo(foldout);
-    
-    
-    
-    //Options
-    var options = {
-        legend: {
-            display: false
-        },
-        title: {
-            display: false
-        },
-        tooltips: {
-            enabled: false
-        },
-        scales: {
-            xAxes: [{
-                type: 'linear',
-                position: 'bottom'
-            }]
+    //Graph
+    {
+        //Get the canvas context.
+        var ctx = foldout.find("canvas").get(0).getContext('2d');
+
+        //Collect the data
+        var points = [];
+        contentObjsAnalyzer.forEach(obj => {
+            obj.forEach(dataPoint => {
+                points.push({
+                    x: dataPoint[fieldX],
+                    y: dataPoint[fieldY]
+                });
+            })
+        });    
+
+
+        //Options
+        var options = {
+            legend: {
+                display: false
+            },
+            title: {
+                display: false
+            },
+            tooltips: {
+                enabled: false
+            },
+            scales: {
+                xAxes: [{
+                    type: 'linear',
+                    position: 'bottom'
+                }]
+            }
         }
+
+        //Create the line graph.
+        var chart = new Chart(ctx, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: "",
+                    data: points
+                }]
+            },
+            options: options
+        });
     }
     
-    //Create the line graph.
-    var chart = new Chart(ctx, {
-        type: 'scatter',
-        data: {
-            datasets: [{
-                label: "",
-                data: points
-            }]
-        },
-        options: options
-    });
+    //Statistics
+    {
+        //Get the values
+        var fieldXVals = points.map(a => parseFloat(a.x));
+        var fieldYVals = points.map(b => parseFloat(b.y));
+        
+        //A function that generates the list of statistics
+        var appendStats = function(foldout, name, values) {
+            var parent = $("<div class='stats'></div>")
+            parent.append($("<h3>" + name + "</h3>"));
+            parent.append($(
+                "<p><span>Mean:</span>" + ss.mean(values) + "</p>" +
+                "<p><span>&sigma;:</span>" + ss.standardDeviation(values) + "</p>" +
+                "<p><span>Variance:</span>" + ss.variance(values) + "</p>" +
+                "<p><span>Min:</span>" + ss.min(values) + "</p>" +
+                "<p><span>Max:</span>" + ss.max(values) + "</p>" + 
+                "<p><span>Median:</span>" + ss.median(values) + "</p>" +
+                "<p><span>Mode:</span>" + ss.mode(values) + "</p>"
+            ));
+            
+            foldout.append(parent);
+        }
+        
+        //Create the lists
+        appendStats(foldout, fieldX, fieldXVals);
+        appendStats(foldout, fieldY, fieldYVals);
+    }
+    
+    //LoggerPro Export
+    {
+        $("<button type='button' class='vernier-export' name='" + fieldX + "-" + fieldY + "'>Export to Graphical Analysis</button>").click(function() {
+            exportVernierFile({
+                name: fieldX,
+                data: points.map(a => a.x)
+            }, {
+                name: fieldY,
+                data: points.map(a => a.y)
+            });
+        }).appendTo(foldout);
+    }
     
     //Append the elements.
     $("div[name=data-graphs] .panel").append(foldoutHeader);
