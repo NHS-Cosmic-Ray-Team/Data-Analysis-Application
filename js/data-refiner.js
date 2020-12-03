@@ -52,7 +52,7 @@ function loadDatasetsRefiner(fileContents) {
                         } else {
                             $("div.outlier-checkboxes input[name='" + field + "']").parent().remove();
                         }
-                    })
+                    });
                     
                     if(i > 0)
                         form.append($("<p class='warning'>Warning: Differing fields in loaded files.</p>"))
@@ -106,6 +106,11 @@ function options() {
                 "<div class='outlier-checkboxes flex-row'>" +
                 "</div>" +
             "</div>"));
+        
+        $("form.file-headers > ul li input[type=checkbox]").each(function() {
+            var field = $(this).attr("name");
+            $("div.outlier-checkboxes").append($("<div class='flex-row'><input type='checkbox' name='" + field + "' checked><p>" + field + "</p></div>"));
+        })
     }
     
     //QUERIES
@@ -196,10 +201,10 @@ function allOrNoneButtons() {
     
     //Create the elements
     var selectAllButton = $("<button type='button' name='select-all' class='alt-button flex-column'>Select All</button>").click(function() {
-        $("form.file-headers ul[name=checkboxes] li input[type=checkbox]").prop("checked", true);
+        $("form.file-headers ul[name=checkboxes] li input[type=checkbox]").prop("checked", true).change();
     });
     var selectNoneButton = $("<button type='button' name='select-none' class='alt-button flex-column'>Select None</button>").click(function() {
-        $("form.file-headers ul[name=checkboxes] li input[type=checkbox]").prop("checked", false);
+        $("form.file-headers ul[name=checkboxes] li input[type=checkbox]").prop("checked", false).change();
     });
     
     //Append them
