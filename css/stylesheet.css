@@ -356,6 +356,29 @@ footer a p {
 
 
 
+[data-documentation] > a.help {
+    position: relative;
+    display: inline-flex;
+    width: 20px;
+    height: 20px;
+    margin: 0 10px;
+    
+    background-color: #a8a8a8;
+    border-radius: 50%;
+    
+    font-family: "Open Sans", sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    color: white;
+    
+    text-decoration: none;
+}
+
+[data-documentation] > a.help:hover {
+    cursor: pointer;
+    background-color: #939393;
+}
+
 .flex-column {
     display: flex;
     flex-direction: column;

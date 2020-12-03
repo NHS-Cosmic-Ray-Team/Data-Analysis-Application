@@ -117,7 +117,7 @@ function options() {
         
         var queryMatchMode = $("<div class='flex-row'><input name='query-mode' type='checkbox' checked><p>AND Matching Mode</p></div>");
 
-        $("form.file-headers").append($("<h3>Inclusion Queries</h3>")).append(queryCreateButton).append(queryMatchMode);
+        $("form.file-headers").append($("<h3 class='flex-row' data-documentation='docs/queries'>Inclusion Queries</h3>")).append(queryCreateButton).append(queryMatchMode);
     }
 }
 

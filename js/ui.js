@@ -27,3 +27,30 @@ function overlay(name, callback = undefined) {
     else
         t.fadeIn(200);
 }
+
+
+
+//Mutation observer to add help buttons to any elements with the data-documentation attribute
+var MutationObserver    = window.MutationObserver || window.WebKitMutationObserver;
+var myObserver          = new MutationObserver (mutationHandler);
+var obsConfig           = { childList: true, characterData: true, attributes: true, subtree: true };
+myObserver.observe (document.body, obsConfig);
+
+function mutationHandler (mutationRecords) {
+    mutationRecords.forEach ( function (mutation) {
+        for(var i = 0; i < mutation.addedNodes.length; i++) {
+            //Only process actual elements.
+            if(mutation.addedNodes[i].nodeType != 1) continue;
+            
+            //If the data-documentation attribute is present, add the help button.
+            if(mutation.addedNodes[i].hasAttribute("data-documentation")) {
+                var target = $(mutation.addedNodes[i]);
+                target.append($("<a class='help flex-row-center' href='docs/#/" + target.attr("data-documentation") + "' target='_blank'>?</a>"));
+            }
+        }
+    } );
+}
+
+$("[data-documentation]").each(function() {
+    $(this).append($("<a class='help flex-row-center' href='docs/#/" + $(this).attr("data-documentation") + "' target='_blank'>?</a>"));
+})
