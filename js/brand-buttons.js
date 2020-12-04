@@ -26,7 +26,7 @@
                         if(typeof(callback) == "function")
                             callback(dropboxDownloads);
                     }
-                }
+                });
             }
         },
 
