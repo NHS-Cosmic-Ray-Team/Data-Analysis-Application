@@ -90,6 +90,15 @@ form.file-headers .query input[type=text].error {
     background-color: #ffd3d3;
 }
 
+form.file-headers .option .outlier-checkboxes {
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+form.file-headers .option .outlier-checkboxes > div {
+    margin-bottom: 10px;
+}
+
 div[name=data-refiner] .panel .actions {
     flex-wrap: wrap;
     border-top: solid 1px gray;

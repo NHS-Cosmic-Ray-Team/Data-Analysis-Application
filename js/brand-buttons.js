@@ -9,18 +9,22 @@
     dropboxOptions = {
 
         // Required. Called when a user selects an item in the Chooser.
-        success: function(files) {
+        success: function(files) {            
             //Reset the tracker variables
             dropboxDownloadCount = 0;
             dropboxDownloads = [];
-            
+                        
             for(var x = 0; x < files.length; x++) {
                 //Download the file contents
-                $.get(files[x].length, function(data) {
+                $.get(files[x].link, function(data) {
+                    console.log(data);
+                    
                     dropboxDownloads.push(data);
                     dropboxDownloadCount++;
 
                     if(dropboxDownloadCount == files.length) {
+                        $(".overlay[name=choose-file]").fadeOut(200);
+                        
                         var callback = eval($(".overlay[name=choose-file]").attr("data-callback"));
 
                         if(typeof(callback) == "function")
