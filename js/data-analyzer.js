@@ -151,7 +151,7 @@ function generateGraph(fieldX, rowNum, fieldY, colNum) {
     
     //LoggerPro Export
     {
-        $("<button type='button' class='vernier-export' name='" + fieldX + "-" + fieldY + "'>Export to Graphical Analysis</button>").click(function() {
+        $("<button type='button' class='vernier-export' name='" + fieldX + "-" + fieldY + "'>Export to LoggerPro</button>").click(function() {
             exportVernierFile({
                 name: fieldX,
                 data: points.map(a => a.x)

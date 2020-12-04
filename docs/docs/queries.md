@@ -28,6 +28,10 @@ Queries can make reference to the values of a column with the following syntax:
 
 ``` trunc(${COUNT}) % 2 == 0 ```
 
+## Matching Mode
+
+The query matching simply defines when a data point should be included. If AND Matching Mode is enabled, then a data point must meet all queries to be included in the final result. But if it's not enabled, the system turns to OR Matching Mode, which requires that only one query is met by a data point to be included.
+
 ### Reference
 
 #### Operators

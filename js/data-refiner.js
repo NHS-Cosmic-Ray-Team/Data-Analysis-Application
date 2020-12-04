@@ -15,7 +15,7 @@ function loadDatasetsRefiner(fileContents) {
     $("div[name=data-refiner] .panel div.actions button[name=export]").remove();
     
     //Create the form for selecting options.
-    var form = $("<form class='file-headers'><h3>Form Headers</h3><ul name='checkboxes'></ul></form></div>");
+    var form = $("<form class='file-headers'><h3>Columns</h3><ul name='checkboxes'></ul></form></div>");
     $("div[name=data-refiner] .panel").prepend(form);
     
     var dataArrays = {};
