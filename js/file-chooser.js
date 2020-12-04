@@ -144,7 +144,7 @@ function validateFile(file) {
     var extension = file.name.split('.').pop();
     
     //If it's not a CSV file, return.
-    if(extension != "csv")
+    if(extension != "csv" && extension != "txt")
         return false;
     
     //If the mime type doesn't match that of a CSV, it's not a valid file.
