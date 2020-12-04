@@ -1,10 +1,33 @@
 //DROPBOX
 {
+    //A counter to make sure all files are downloaded before sending to the callback.
+    var dropboxDownloadCount;
+    
+    //An array of the downloaded Dropbox file contents.
+    var dropboxDownloads;
+    
     dropboxOptions = {
 
         // Required. Called when a user selects an item in the Chooser.
         success: function(files) {
-            //TODO: Dropbox Implementation
+            //Reset the tracker variables
+            dropboxDownloadCount = 0;
+            dropboxDownloads = [];
+            
+            for(var x = 0; x < files.length; x++) {
+                //Download the file contents
+                $.get(files[x].length, function(data) {
+                    dropboxDownloads.push(data);
+                    dropboxDownloadCount++;
+
+                    if(dropboxDownloadCount == files.length) {
+                        var callback = eval($(".overlay[name=choose-file]").attr("data-callback"));
+
+                        if(typeof(callback) == "function")
+                            callback(dropboxDownloads);
+                    }
+                }
+            }
         },
 
         // Optional. Called when the user closes the dialog without selecting a file
@@ -16,7 +39,7 @@
         // Optional. "preview" (default) is a preview link to the document for sharing,
         // "direct" is an expiring link to download the contents of the file. For more
         // information about link types, see Link types below.
-        linkType: "preview", // or "direct"
+        linkType: "direct", // or "direct"
 
         // Optional. A value of false (default) limits selection to a single file, while
         // true enables multiple file selection.
