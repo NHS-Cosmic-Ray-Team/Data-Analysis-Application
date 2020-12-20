@@ -1,8 +1,8 @@
-# Data Analysis Tool
+# cData
 
 ## What is this?
 
-This tool is meant to make processing data from the Cosmic Ray Tube easier. It offers two primary functions: data refinement and data analysis, each of which is described in further detail below.
+cData stands for "Cosmic Data Analysis and Transformation Application". This tool is meant to make processing data from the Cosmic Ray Tube easier. It offers two primary functions: data refinement and data analysis, each of which is described in further detail below.
 
 ## Features
 
@@ -23,7 +23,7 @@ Excellent question! The tool is made to be as straightforward as possible, but t
 
 ## I found a bug. Now what?
 
-Bugs can be annoying, but luckily we planned for it. Since this tool is hosted on Github, just press the icon in the top right corner of this page (or go to [https://www.github.com/NHS-Cosmic-Ray-Team/Data-Analysis-Application](https://www.github.com/NHS-Cosmic-Ray-Team/Data-Analysis-Application)). Then click "Issues" and write out a description of the problem. We'll do our best to resolve it!
+Bugs can be annoying, but luckily we planned for it. Since this tool is hosted on Github, just press the icon in the top right corner of this page (or go to [https://www.github.com/NHS-Cosmic-Ray-Team/cData](https://www.github.com/NHS-Cosmic-Ray-Team/cData)). Then click "Issues" and write out a description of the problem. We'll do our best to resolve it!
 
 
 ## Who made this tool?
