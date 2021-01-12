@@ -16,7 +16,7 @@ function modifyTag(xml, tag, value, index=-1) {
 //A function for generating a Vernier .gambl file and prompting the user to save it.
 function exportVernierFile(column1, column2) {    
     $.ajax({
-        url: "https://nhs-cosmic-ray-team.github.io/Data-Analysis-Application/resources/data.cmbl",
+        url: "https://nhs-cosmic-ray-team.github.io/cData/resources/data.cmbl",
         success: function(data) {
             var xml = data;
             
