@@ -16,9 +16,7 @@
                         
             for(var x = 0; x < files.length; x++) {
                 //Download the file contents
-                $.get(files[x].link, function(data) {
-                    console.log(data);
-                    
+                $.get(files[x].link, function(data) {                    
                     dropboxDownloads.push(data);
                     dropboxDownloadCount++;
 

@@ -5,7 +5,7 @@ var contentObjsRefiner;
 var basicStats = {};
 
 //Acts as a callback for the filechooser
-function loadDatasetsRefiner(fileContents) {
+function loadDatasetsRefiner(fileContents) {    
     //Empty the array when new files are uploaded
     contentObjsRefiner = [];
     
@@ -19,21 +19,59 @@ function loadDatasetsRefiner(fileContents) {
     $("div[name=data-refiner] .panel").prepend(form);
     
     var dataArrays = {};
-    
+    var fields;
+        
     //Loop through each file, save its contents, and add its fields to the list of choices.
-    for(var i = 0; i < fileContents.length; i++) {
+    for(var i = 0; i < fileContents.length; i++) {        
         fileContents[i] = fileContents[i].split('\n').filter(x => {
             return x.replace(/,|\r|\n/g, '').length != 0;
         }).join('\n');
-        
+                
+        //Checks whether there's a header
+        var lines = fileContents[i].split('\n');
+        var hasHeader = lines[0].toLowerCase().startsWith("date");
+                
+        //If no header exists, add a default header.
+        if(!hasHeader) {
+            //The old contents of the file
+            var contents = fileContents[i];
+            
+            var numColumns = lines[0].split(',').length + 1;            
+            var header = "";
+            for(var j = 0; j < numColumns; j++) {
+                header += "Column" + (j + 1);
+                if(j != numColumns - 1)
+                    header += ",";
+            }
+            
+            fileContents[i] = header + "\n" + contents;
+        }
+                    
         var data = Papa.parse(fileContents[i], {
             header: true,
-            skipEmptyLines: true
+            skipEmptyLines: true,
+            transform: function(value, column) {
+                //Removes headers inserted into the middle of files by the cosmic ray code
+                if(value.toLocaleLowerCase() === column.toLocaleLowerCase())
+                    return "";
+                
+                //Removes headers inserted into the middle of files that are caught in the previous line.
+                var split = value.split(/\s/);
+                if(split.length > 1)                
+                    return split[0];
+                
+                //If there are no headers present, it just returns the original value.
+                return value;
+            }
         });
         contentObjsRefiner.push(data);
+        
+        //Sets the fields to the columns from the first file.
+        if(fields == undefined)
+            fields = data.meta.fields;
                 
         //Add the fields as checkboxes to select
-        data.meta.fields.forEach(field => {
+        fields.forEach(field => {
             if(field != "") {
                 data.data.forEach(obj => {
                     if(dataArrays[field] == undefined)
@@ -43,7 +81,7 @@ function loadDatasetsRefiner(fileContents) {
                 })
                 
                 
-                if(form.find("ul li input[name=" + field + "]").length <= 0) {
+                if(form.find("ul li input[name='" + field + "']").length <= 0) {
                     form.find("ul").append($("<li class='flex-row'><input name='" + field + "' type='checkbox' value='" + field + "' checked><label for='" + field + "'>" + field + "</label></li>"))
                     
                     $("input[name='" + field + "']").change(function() {
@@ -54,8 +92,8 @@ function loadDatasetsRefiner(fileContents) {
                         }
                     });
                     
-                    if(i > 0)
-                        form.append($("<p class='warning'>Warning: Differing fields in loaded files.</p>"))
+                    if(i > 0 && form.find("> .warning[name=fields]").length <= 0)
+                        form.append($("<p name='fields' class='warning'>Warning: Differing fields in loaded files.</p>"))
                 }
             }
         });
@@ -70,7 +108,7 @@ function loadDatasetsRefiner(fileContents) {
             deviation: ss.standardDeviation(arr)
         };
     });
-    
+        
     allOrNoneButtons();
     options();
     exportButton();
@@ -235,9 +273,17 @@ function sendToAnalyzerButton() {
 }
 
 //A function for exporting the selection
-function exportFiles() {    
+function exportFiles() { 
+    var exported = generateExportedCSVObject();
+    
     var blob = new Blob([
-        Papa.unparse(generateExportedCSVObject())
+        Papa.unparse(exported, {
+            quotes: false,
+            quoteChar: '',
+            escapeChar: '',
+            delimiter: ",",
+            skipEmptyLines: 'greedy' //other option is 'greedy', meaning skip delimiters, quotes, and whitespace.
+        })
     ], {type: "text/csv;charset=utf-8"});
     saveAs(blob, "export.csv");
 }
@@ -267,7 +313,7 @@ function generateExportedCSVObject() {
     
     if(rowRanges.length == 0)
         rowRanges.push([0, 0]);
-            
+                
     //Loop through all files and all row ranges
     contentObjsRefiner.forEach(data => {
         var content = data.data;
@@ -276,7 +322,7 @@ function generateExportedCSVObject() {
             //Deal with cases where no range was specified or the range is out of bounds
             if(range[1] == 0 || range[1] > content.length)
                 range[1] = content.length;
-
+            
             for(var i = range[0]; i < range[1]; i++) {
                 //Column refinement
                 var push = valuesKeysContain(content[i], selectedFields);
@@ -288,7 +334,6 @@ function generateExportedCSVObject() {
                 
                 //Query refinement
                 var matchMode = $("input[name=query-mode]").is(":checked") ? 0 : 1;
-                                
                 if(!checkForQueries(queries, selectedFields, push, matchMode))
                     continue;
                 

@@ -31,3 +31,9 @@ Inclusion queries are a system developed for this application that allow the use
 Clicking "Create Query" will add a query box. This textbook accepts user input that specifies a condition to meet. See [Writing a Query](docs/queries.md) for information on how to write an inclusion query. If a query is syntactically invalid, the box will turn red. Clicking export with a red query means that it won't be used by the refinement tool.
 
 There are two query modes available: AND mode and OR mode. The former, AND mode, requires that a data point meet all inclusion queries to be included in the final result. The latter, OR mode, will include a data point if it matches just one inclusion query.
+
+## Troubleshooting Warnings
+
+### Differing fields in loaded files.
+
+This warning means that multiple files were uploaded, and at least two of the files have different fields (or the same fields in a different order). This could cause problems with how the files are loaded and saved, especially when performing column refinement.
