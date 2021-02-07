@@ -71,6 +71,7 @@ function loadDatasetsRefiner(fileContents) {
             fields = data.meta.fields;
                 
         //Add the fields as checkboxes to select
+        var fieldCounter = 1;
         fields.forEach(field => {
             if(field != "") {
                 data.data.forEach(obj => {
@@ -82,11 +83,26 @@ function loadDatasetsRefiner(fileContents) {
                 
                 
                 if(form.find("ul li input[name='" + field + "']").length <= 0) {
-                    form.find("ul").append($("<li class='flex-row'><input name='" + field + "' type='checkbox' value='" + field + "' checked><label for='" + field + "'>" + field + "</label></li>"))
+                    //Adds the checkbox and name changer for the fields
+                    var element = $("<li class='flex-row'><input name='" + field + "' type='checkbox' value='" + field + "' data-export-name='" + field + "' checked><label for='" + field + "'><input type='text' placeholder='Column " + fieldCounter + "' value='" + field + "'></label></li>");
+                    element.find("input[type=text]").change(function() {
+                        var exportName = $(this).val() != "" ? $(this).val() : $(this).attr("placeholder");
+                        
+                        //Set the export name on the checkbox
+                        $(this).parent().siblings("input[type=checkbox]").attr("data-export-name", exportName);
+                        
+                        //Changes the labels on the outlier fields
+                        $("div.outlier-checkboxes input[name='" + field + "'] + p").text(exportName);
+                    })
                     
-                    $("input[name='" + field + "']").change(function() {
+                    form.find("ul").append(element);
+                
+                    //Field counter for input placeholders
+                    fieldCounter++;
+                    
+                    $("input[type=checkbox][name='" + field + "']").change(function() {
                         if($(this).is(":checked")) {
-                            $("div.outlier-checkboxes").append($("<div class='flex-row'><input type='checkbox' name='" + field + "' checked><p>" + field + "</p></div>"));
+                            $("div.outlier-checkboxes").append($("<div class='flex-row'><input type='checkbox' name='" + field + "' checked><p>" + $(this).attr("data-export-name") + "</p></div>"));
                         } else {
                             $("div.outlier-checkboxes input[name='" + field + "']").parent().remove();
                         }
@@ -294,13 +310,26 @@ function generateExportedCSVObject() {
     var selectedFields = $("form.file-headers ul[name=checkboxes] input:checked").map(function() { 
         return this.value; 
     }).get();
+    
+    //Gets the actual user set names of the columns
+    var selectedExportNames = $("form.file-headers ul[name=checkboxes] input:checked + label input[type=text]").map(function() {
+        var value = $(this).parent().siblings("input[type=checkbox]").attr("data-export-name");
+        if(value != undefined) {
+            if(value == "")
+                return $(this).attr("placeholder");
+            
+            return value;
+        }
+        
+        return $(this).val();    
+    }).get();
         
     //Get any existing queries
     var queries = $("form.file-headers .query input[type=text]").map(function() {
         return $(this).val();
     }).get();
         
-    var result = [selectedFields];
+    var result = [selectedExportNames];
     
     //Get the start and end rows.
     var rowRanges = [];

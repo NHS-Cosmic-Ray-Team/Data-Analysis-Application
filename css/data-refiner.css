@@ -30,10 +30,34 @@ form.file-headers ul li:not(:first-child) {
 }
 
 form.file-headers ul li label {
-    font-family: "Open Sans", sans-serif;
-    font-size: 16px;
-    color: black;
     margin-left: 10px;
+}
+
+form.file-headers ul li label input {
+    display: inline-block;
+    padding: 2px;
+    margin: 2px;
+    border-radius: 3px;
+    
+    font-family: "Open Sans", sans-serif;
+    font-size: 12px;
+    color: black;
+    
+    border: none;
+    outline: none;
+}
+
+form.file-headers ul li label:hover input, form.file-headers ul li label input:focus, form.file-headers ul li label input:active {
+    margin: 1px;
+    border: solid 1px black;
+    
+    -webkit-box-shadow: 0px 0px 10px -6px rgb(77 78 79);
+    -moz-box-shadow: 0px 0px 10px -6px rgb(77 78 79);
+    box-shadow: 0px 0px 10px -6px rgb(77 78 79);
+}
+
+form.file-headers ul li label input:focus, form.file-headers ul li label input:active {
+    border-width: 1.5px;
 }
 
 form.file-headers .option {
