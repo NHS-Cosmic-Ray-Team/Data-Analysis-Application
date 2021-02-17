@@ -24,6 +24,19 @@ Row refinement allows the user to define ranges of data to select. Clicking "Cre
 
 Outliers can often skew data, so this aspect of the refinement tool allows them to be easily removed. Firstly, enable the option by checking the box on the left of the outlier dialogue. Then specify the number of standard deviations that data is allowed to fall within without being excluded. Finally, check the columns that outliers should be removed from (note that only columns selected in the column refinement section will offer to have outliers removed). If an outlier is present in any of the selected columns for a data point, that data point is excluded from the final result. Non-selected columns are not affected by outlier removal.
 
+<a name="rowmods"></a>
+### With Row Modifications
+
+Row Modifiers are used to reduce the number of rows included in the final output. However, instead of truncating information like with row ranges, row modifiers take a look at the actual data to reduce the size. The operations that can be used are listed below:
+
+| Operation | Shows Up As | Description                                                     |
+|-----------|-------------|-----------------------------------------------------------------|
+| Average   | Avg         | Creates a single row averaging the values of each selected row. |
+| Minimum   | Min         | Selects the row with the least value in a specific column.      |
+| Maximum   | Max         | Selects the row with the largest value in a specific column.    |
+| First     | First       | Selects the first row in the set of selected rows.              |
+| Last      | Last        | Selects the last row in the set of selected rows.               |
+
 ### With Inclusion Queries
 
 Inclusion queries are a system developed for this application that allow the user to specify an arithmetic condition that a data point must meet to be included in the exported result.

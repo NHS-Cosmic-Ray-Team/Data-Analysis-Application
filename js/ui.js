@@ -10,6 +10,27 @@ $(".overlay").click(function(e) {
         $(this).fadeOut(200);
 })
 
+//Custom dropdown functionality
+$("body").on("click", "ul.select", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if($(this).siblings("input[type=checkbox]:checked").length > 0)
+        $(this).toggleClass("open");
+}).on("click", "ul.select li", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    var parent = $(this).parentsUntil("ul.select").parent();
+    
+    parent.attr("value", $(this).attr("value"));
+    parent.find("> p").text($(this).text());
+    parent.removeClass("open");
+});
+$(window).click(function() {
+    $("ul.select.open").removeClass("open");
+})
+
 //A function for making an overlay visible
 function overlay(name, callback = undefined) {
     var t = $(".overlay[name='" + name + "']");

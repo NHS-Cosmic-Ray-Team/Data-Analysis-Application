@@ -356,6 +356,123 @@ footer a p {
 
 
 
+
+ul.select {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    margin: 0 10px;
+    
+    border-bottom: solid #4141ea 4px;
+    user-select: none;
+    transition: border ease 0.2s;
+}
+
+ul.select.open {
+    z-index: 2;
+}
+
+ul.select.hide {
+    display: none;
+}
+
+ul.select:hover {
+    border-bottom: solid #09ac29 4px;
+    cursor: pointer;
+}
+
+form.file-headers .option input[type=checkbox]:not(:checked) ~ ul.select {
+    border-bottom: solid #c7c7c7 4px;
+}
+
+ul.select > p {
+    position: relative;
+    font-family: "Open Sans", sans-serif;
+    font-size: 14px;
+    text-align: center;
+    margin-right: 25px;
+}
+
+ul.select > p:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: calc(100% + 15px);
+    transform: translate(-50%, -50%);
+    width: 15px;
+    height: 15px;
+    
+    background-image: url("../images/dropdown-arrow.png");
+    background-size: contain;
+    background-position: center;
+}
+
+ul.select > div {
+    position: absolute;
+    display: none;
+    top: calc(100% + 4px);
+    left: 0;
+    max-height: 200px;
+    
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border: solid 1px #c6c6c6;
+    
+    background-color: white;
+    overflow-x: hidden;
+    overflow-y: auto;
+    
+    z-index: 2;
+}
+
+ul.select.open > div {
+    display: inline-block;
+}
+
+ul.select > div div {
+    display: inline-flex;
+    flex-direction: column;
+    min-width: 100%;
+    max-width: 200px;
+}
+
+ul.select > div li {
+    position: relative;
+    width: calc(100% - 20px);
+    padding: 10px;
+    
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    
+    overflow-wrap: break-word;
+    user-select: none;
+    
+    background-color: white;
+}
+
+ul.select > div li:not(:last-child):before {
+    content: "";
+    position: absolute;
+    top: calc(100% - 1px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 1px;
+    background-color: gray;
+}
+
+ul.select > div li:hover {
+    cursor: pointer;
+    background-color: #e6e6e6;
+}
+
+
+
+
+
+
 [data-documentation] > a.help {
     position: relative;
     display: inline-flex;
@@ -398,6 +515,14 @@ footer a p {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.flex-inline {
+    display: inline-flex;
 }
 
 .center {

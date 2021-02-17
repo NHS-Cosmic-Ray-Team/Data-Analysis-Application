@@ -16,20 +16,22 @@ form.file-headers h3:not(:first-of-type) {
     padding-top: 20px;
 }
 
-form.file-headers ul {
+form.file-headers ul:not(.select) {
     width: calc(100% - 50px);
     margin-top: 10px;
 }
 
-form.file-headers ul li {
+form.file-headers ul:not(.select) li {
     margin-bottom: 20px;
 }
 
-form.file-headers ul li:not(:first-child) {
+/*
+form.file-headers ul:not(.select) li:not(:first-child) {
     margin-left: 40px;
 }
+*/
 
-form.file-headers ul li label {
+form.file-headers ul:not(.select) li label {
     margin-left: 10px;
 }
 
@@ -74,11 +76,11 @@ form.file-headers .option:not(:last-of-type) {
     margin-top: 20px;
 }
 
-form.file-headers .option *:first-child {
+form.file-headers .option > *:first-child {
     margin-right: 20px;
 }
 
-form.file-headers .option *:not(:first-child) {
+form.file-headers .option > *:not(:first-child) {
     margin-left: 10px;
 }
 
@@ -93,6 +95,7 @@ form.file-headers .option input[type=number], form.file-headers .option input[ty
     border: solid 1px #767676;
     border-radius: 5px;
     padding: 5px;
+    margin: 0 10px;
 }
 
 form.file-headers .option input[type=checkbox]:not(:checked) ~ p {
@@ -121,6 +124,7 @@ form.file-headers .option .outlier-checkboxes {
 
 form.file-headers .option .outlier-checkboxes > div {
     margin-bottom: 10px;
+    margin-left: 10px;
 }
 
 div[name=data-refiner] .panel .actions {
