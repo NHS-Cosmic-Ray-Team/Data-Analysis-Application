@@ -37,6 +37,10 @@ Row Modifiers are used to reduce the number of rows included in the final output
 | First     | First       | Selects the first row in the set of selected rows.              |
 | Last      | Last        | Selects the last row in the set of selected rows.               |
 
+Then you enter the number of rows to use in each execution of the operation. For instance, entering "5" with the average operation will cause every five rows to be averaged together.
+
+Finally, selecting the input and output controls when the row modificaition occurs. Choosing input means the operation will be applied before any filtering is done. Choosing output means the operation is applied after all other refinement is complete.
+
 ### With Inclusion Queries
 
 Inclusion queries are a system developed for this application that allow the user to specify an arithmetic condition that a data point must meet to be included in the exported result.
